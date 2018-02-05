@@ -18,7 +18,11 @@
 
 package org.edgexfoundry.engine;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.edgexfoundry.controller.CmdClient;
+import org.edgexfoundry.controller.NotificationClient;
+import org.edgexfoundry.support.domain.notifications.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -29,6 +33,9 @@ public class CommandExecutor {
   @Autowired
   private CmdClient client;
 
+  @Autowired
+  private NotificationClient notificationClient;
+
   private static final org.edgexfoundry.support.logging.client.EdgeXLogger logger =
       org.edgexfoundry.support.logging.client.EdgeXLoggerFactory
           .getEdgeXLogger(CommandExecutor.class);
@@ -38,8 +45,15 @@ public class CommandExecutor {
     logger.info(
         "Sending request to:  " + deviceId + "for command:  " + commandId + " with body: " + body);
     try {
+
+      if(deviceId.equalsIgnoreCase("notification")){
+          postNotification(body);
+      }
       // for now - all rule engine requests are puts
-      forwardRequest(deviceId, commandId, body, true);
+      else {
+        forwardRequest(deviceId, commandId, body, true);
+      }
+
     } catch (Exception exception) {
       logger.error("Problem sending command to the device service " + exception);
     }
@@ -55,6 +69,16 @@ public class CommandExecutor {
       logger.error("Command Client not available - no command sent for: " + id + " to " + commandId
           + " containing: " + body);
     }
+  }
+
+  private void postNotification(String content){
+    logger.info("Sending notification");
+    Gson gson = new Gson();
+    Notification n = gson.fromJson(content, Notification.class);
+    logger.info("Notification parsed: "+n.toString());
+    n.setSlug(n.getSlug()+System.currentTimeMillis());
+    notificationClient.receiveNotification(n);
+    logger.info("Notification sent");
   }
 
 }

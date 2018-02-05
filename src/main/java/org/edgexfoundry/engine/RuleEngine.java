@@ -119,16 +119,23 @@ public class RuleEngine {
 
   public List<String> getRulenames() {
     List<String> result = new ArrayList<>();
+    logger.info("Calling getRuleNames");
     try {
       KiePackage kpkg = kbase.getKiePackage(packageName);
       if (kpkg != null) {
         Collection<Rule> rules = kpkg.getRules();
+        logger.info("Rules size "+ rules.size());
         if (rules != null) {
           for (Rule rule : rules) {
             result.add(rule.getName());
           }
+        } else {
+          logger.info("dio merdaccia");
         }
+      } else{
+        logger.info("Gesu merdaccia");
       }
+      logger.info("Result size "+ result.size());
       return result;
     } catch (Exception ex) {
       logger.error(ex.getMessage());
@@ -197,6 +204,7 @@ public class RuleEngine {
     uploadDroolFiles();
     KieBuilder kbuilder = ks.newKieBuilder(kfs);
     kbuilder.buildAll();
+    logger.info(kbuilder.getResults().toString());
     if (kbuilder.getResults().hasMessages(Level.ERROR)) {
       throw new IllegalArgumentException(kbuilder.getResults().toString());
     }
@@ -204,5 +212,9 @@ public class RuleEngine {
     KieBaseConfiguration kbConfig = KieServices.Factory.get().newKieBaseConfiguration();
     kbConfig.setOption(ConstraintJittingThresholdOption.get(-1));
     kbase = kcontainer.newKieBase(kbConfig);
+    logger.info("These are the packages, SPARTAAAAAAAA");
+    for (KiePackage kp : kbase.getKiePackages()){
+      logger.info("Gesuzzo " + kp.getName());
+    }
   }
 }

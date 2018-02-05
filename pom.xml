@@ -37,6 +37,7 @@
 		<export-domain.version>0.5.0-SNAPSHOT</export-domain.version>
 		<core-test.version>0.5.0-SNAPSHOT</core-test.version>
 		<support-logging-client.version>0.5.0-SNAPSHOT</support-logging-client.version>
+		<support-notifications-client.version>0.5.0-SNAPSHOT</support-notifications-client.version>
 		<assembley-plugin.version>2.5.5</assembley-plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -161,6 +162,11 @@
 			<groupId>org.edgexfoundry</groupId>
 			<artifactId>support-logging-client</artifactId>
 			<version>${support-logging-client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.edgexfoundry</groupId>
+			<artifactId>support-notifications-client</artifactId>
+			<version>${support-notifications-client.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
