@@ -130,10 +130,10 @@ public class RuleEngine {
             result.add(rule.getName());
           }
         } else {
-          logger.info("dio merdaccia");
+          logger.info("No rules");
         }
       } else{
-        logger.info("Gesu merdaccia");
+        logger.info("No packages");
       }
       logger.info("Result size "+ result.size());
       return result;

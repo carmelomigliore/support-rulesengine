@@ -67,12 +67,19 @@ public class ZeroMQEventSubscriber {
     logger.info("Watching for new exported Event messages...");
     try {
       while (!Thread.currentThread().isInterrupted()) {
+        logger.info("Inside while");
         if (exportClient) {
+          logger.info("Inside if export client");
           exportString = subscriber.recvStr();
+          logger.info("After Recvstr subscriber");
           event = toEvent(exportString);
+          logger.info("ToEvent done");
         } else {
+          logger.info("Before Recv subscriber");
           exportBytes = subscriber.recv();
+          logger.info("After Recv subscriber");
           event = toEvent(exportBytes);
+          logger.info("ToEvent done");
         }
         engine.execute(event);
         logger.info("Event sent to rules engine for device id:  " + event.getDevice());
